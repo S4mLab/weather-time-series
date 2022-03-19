@@ -16,13 +16,5 @@
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "devDependencies": {
     "parcel": "^2.3.2"
-  },
-  "staticFiles": {
-    "staticPath": [
-      {
-        "staticPath": "data",
-        "staticOutDir": "data/"
-      }
-    ]
   }
 }

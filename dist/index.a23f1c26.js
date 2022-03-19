@@ -520,9 +520,14 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"grVca":[function(require,module,exports) {
 var _d3 = require("d3");
+const weatherUrl = 'https://gist.githubusercontent.com/S4mLab/443e4c9ec734ce19b202c54b0666e7fe/raw/6d14a1d3778b39d3b3b5e9509ecb17cee738bc9a/weather_data.json';
 async function drawLineChart() {
-    const weatherObjsList = await _d3.json('./data/my_weather_data.json');
-    console.log(weatherObjsList);
+    try {
+        const weatherObjsList = await _d3.json(weatherUrl);
+        console.log(weatherObjsList);
+    } catch (err) {
+        console.error(err);
+    }
 }
 drawLineChart();
 
