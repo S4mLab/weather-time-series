@@ -35,4 +35,10 @@ async function drawLineChart() {
   }
 }
 
-drawLineChart();
+const wrapper = d3
+  .select('#wrapper')
+  .append('svg')
+  .attr('width', wrapperDimensions.width)
+  .attr('height', wrapperDimensions.height);
+
+console.log(wrapper);

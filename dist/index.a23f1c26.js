@@ -521,6 +521,21 @@ function hmrAcceptRun(bundle, id) {
 },{}],"grVca":[function(require,module,exports) {
 var _d3 = require("d3");
 const weatherUrl = 'https://gist.githubusercontent.com/S4mLab/443e4c9ec734ce19b202c54b0666e7fe/raw/6d14a1d3778b39d3b3b5e9509ecb17cee738bc9a/weather_data.json';
+let wrapperDimensions = {
+    width: window.innerWidth * 0.9,
+    height: 400,
+    margins: {
+        top: 15,
+        right: 15,
+        bottom: 40,
+        left: 60
+    }
+};
+// dimension of the bounds
+let graphDimension = {
+    width: wrapperDimensions.width - wrapperDimensions.margins.left - wrapperDimensions.margins.right,
+    height: wrapperDimensions.height - wrapperDimensions.margins.top - wrapperDimensions.margins.bottom
+};
 async function drawLineChart() {
     try {
         const weatherObjsList = await _d3.json(weatherUrl);
@@ -529,7 +544,8 @@ async function drawLineChart() {
         console.error(err);
     }
 }
-drawLineChart();
+const wrapper = _d3.select('#wrapper').append('svg').attr('width', wrapperDimensions.width).attr('height', wrapperDimensions.height);
+console.log(wrapper);
 
 },{"d3":"17XFv"}],"17XFv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
