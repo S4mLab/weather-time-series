@@ -544,8 +544,12 @@ async function drawLineChart() {
         console.error(err);
     }
 }
-const wrapper = _d3.select('#wrapper').append('svg').attr('width', wrapperDimensions.width).attr('height', wrapperDimensions.height);
-console.log(wrapper);
+const wrapper = _d3.select('#wrapper').append('svg').attr('width', wrapperDimensions.width).attr('height', wrapperDimensions.height).style('border', '1px solid');
+const graph = wrapper.append('g').style('transform', `translate(
+    ${wrapperDimensions.margins.left}px,
+    ${wrapperDimensions.margins.top}px
+  )`);
+console.log(graph);
 
 },{"d3":"17XFv"}],"17XFv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

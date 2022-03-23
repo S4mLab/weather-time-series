@@ -39,6 +39,15 @@ const wrapper = d3
   .select('#wrapper')
   .append('svg')
   .attr('width', wrapperDimensions.width)
-  .attr('height', wrapperDimensions.height);
+  .attr('height', wrapperDimensions.height)
+  .style('border', '1px solid');
 
-console.log(wrapper);
+const graph = wrapper.append('g').style(
+  'transform',
+  `translate(
+    ${wrapperDimensions.margins.left}px,
+    ${wrapperDimensions.margins.top}px
+  )`
+);
+
+console.log(graph);
