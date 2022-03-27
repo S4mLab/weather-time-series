@@ -521,7 +521,8 @@ function hmrAcceptRun(bundle, id) {
 },{}],"grVca":[function(require,module,exports) {
 var _d3 = require("d3");
 const weatherUrl = 'https://gist.githubusercontent.com/S4mLab/443e4c9ec734ce19b202c54b0666e7fe/raw/6d14a1d3778b39d3b3b5e9509ecb17cee738bc9a/weather_data.json';
-let wrapperDimensions = {
+// dimension of the wrapper
+const wrapperDimensions = {
     width: window.innerWidth * 0.9,
     height: 400,
     margins: {
@@ -532,35 +533,41 @@ let wrapperDimensions = {
     }
 };
 // dimension of the graph
-let graphDimension = {
+const graphDimension = {
     width: wrapperDimensions.width - wrapperDimensions.margins.left - wrapperDimensions.margins.right,
     height: wrapperDimensions.height - wrapperDimensions.margins.top - wrapperDimensions.margins.bottom
 };
-let weatherObjsList = [];
-async function loadTheData() {
+async function drawLineGraph() {
+    let weatherObjsList;
+    // loading data
     try {
         weatherObjsList = await _d3.json(weatherUrl);
         console.log(weatherObjsList);
     } catch (err) {
         console.error(err);
     }
+    // Data accessors and processors
+    const yAccessor = (dataObj)=>dataObj.temperatureMax
+    ;
+    const dateParser = _d3.timeParse('%Y-%m-%d');
+    const xAccessor = (dataObj)=>dateParser(dataObj.date)
+    ;
+    // initiate the wrapper around the graph
+    const wrapper = _d3.select('#wrapper').append('svg').attr('width', wrapperDimensions.width).attr('height', wrapperDimensions.height).style('border', '1px solid');
+    // initiate the graph that display the data
+    const graph = wrapper.append('g').style('transform', `translate(
+      ${wrapperDimensions.margins.left}px,
+      ${wrapperDimensions.margins.top}px
+    )`);
+    const tempDomain = _d3.extent(weatherObjsList, yAccessor);
+    const yScale = _d3.scaleLinear().domain(tempDomain).range([
+        graphDimension.height,
+        0
+    ]);
+    const freezingTempScale = yScale(32);
+    const freezingTempArea = graph.append('rect').attr('x', 0).attr('width', graphDimension.width).attr('y', freezingTempScale).attr('height', graphDimension.height - freezingTempScale).attr('fill', '#e0f3f3');
 }
-// Data accessors and processors
-const yAccessor = (dataObj)=>dataObj.temperatureMax
-;
-const dateParser = _d3.timeParse('%Y-%m-%d');
-const xAccessor = (dataObj)=>dateParser(dataObj.date)
-;
-// initiate the wrapper around the graph
-const wrapper = _d3.select('#wrapper').append('svg').attr('width', wrapperDimensions.width).attr('height', wrapperDimensions.height).style('border', '1px solid');
-// initiate the graph that display the data
-const graph = wrapper.append('g').style('transform', `translate(
-    ${wrapperDimensions.margins.left}px,
-    ${wrapperDimensions.margins.top}px
-  )`);
-await loadTheData();
-const tempDomain = _d3.extent(await weatherObjsList, yAccessor);
-console.log(tempDomain); // const yScale = d3.scaleLinear().domain().range();
+drawLineGraph();
 
 },{"d3":"17XFv"}],"17XFv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
