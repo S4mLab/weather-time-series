@@ -531,25 +531,36 @@ let wrapperDimensions = {
         left: 60
     }
 };
-// dimension of the bounds
+// dimension of the graph
 let graphDimension = {
     width: wrapperDimensions.width - wrapperDimensions.margins.left - wrapperDimensions.margins.right,
     height: wrapperDimensions.height - wrapperDimensions.margins.top - wrapperDimensions.margins.bottom
 };
-async function drawLineChart() {
+let weatherObjsList = [];
+async function loadTheData() {
     try {
-        const weatherObjsList = await _d3.json(weatherUrl);
+        weatherObjsList = await _d3.json(weatherUrl);
         console.log(weatherObjsList);
     } catch (err) {
         console.error(err);
     }
 }
+// Data accessors and processors
+const yAccessor = (dataObj)=>dataObj.temperatureMax
+;
+const dateParser = _d3.timeParse('%Y-%m-%d');
+const xAccessor = (dataObj)=>dateParser(dataObj.date)
+;
+// initiate the wrapper around the graph
 const wrapper = _d3.select('#wrapper').append('svg').attr('width', wrapperDimensions.width).attr('height', wrapperDimensions.height).style('border', '1px solid');
+// initiate the graph that display the data
 const graph = wrapper.append('g').style('transform', `translate(
     ${wrapperDimensions.margins.left}px,
     ${wrapperDimensions.margins.top}px
   )`);
-console.log(graph);
+await loadTheData();
+const tempDomain = _d3.extent(await weatherObjsList, yAccessor);
+console.log(tempDomain); // const yScale = d3.scaleLinear().domain().range();
 
 },{"d3":"17XFv"}],"17XFv":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

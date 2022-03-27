@@ -14,7 +14,7 @@ let wrapperDimensions = {
   },
 };
 
-// dimension of the bounds
+// dimension of the graph
 let graphDimension = {
   width:
     wrapperDimensions.width -
@@ -26,15 +26,23 @@ let graphDimension = {
     wrapperDimensions.margins.bottom,
 };
 
-async function drawLineChart() {
+let weatherObjsList = [];
+
+async function loadTheData() {
   try {
-    const weatherObjsList = await d3.json(weatherUrl);
+    weatherObjsList = await d3.json(weatherUrl);
     console.log(weatherObjsList);
   } catch (err) {
     console.error(err);
   }
 }
 
+// Data accessors and processors
+const yAccessor = (dataObj) => dataObj.temperatureMax;
+const dateParser = d3.timeParse('%Y-%m-%d');
+const xAccessor = (dataObj) => dateParser(dataObj.date);
+
+// initiate the wrapper around the graph
 const wrapper = d3
   .select('#wrapper')
   .append('svg')
@@ -42,6 +50,7 @@ const wrapper = d3
   .attr('height', wrapperDimensions.height)
   .style('border', '1px solid');
 
+// initiate the graph that display the data
 const graph = wrapper.append('g').style(
   'transform',
   `translate(
@@ -50,4 +59,9 @@ const graph = wrapper.append('g').style(
   )`
 );
 
-console.log(graph);
+await loadTheData();
+
+const tempDomain = d3.extent(await weatherObjsList, yAccessor);
+console.log(tempDomain);
+
+// const yScale = d3.scaleLinear().domain().range();
